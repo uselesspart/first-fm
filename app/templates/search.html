@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<form action="{% url 'result'%}" method="post">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Genre:</legend>
+    
+    {% for i in genres%}
+    <div>
+        <input type="checkbox" id="{{i.name}}" name="{{i.name}}" checked />
+        <label for="{{i.name}}">{{i.name}}</label>
+      </div>
+    {%endfor%}
+
+  </fieldset>
+  <fieldset>
+    <legend>Year</legend>
+    <div>
+      From:
+      <input type="text" id="year-start" name="year-start" value="1900" />
+      To:
+      <input type="text" id="year-end" name="year-end" value="2024" />
+    </div>
+  </fieldset>
+  <button type="submit">Search</button>
+</form>
+{% endblock %}

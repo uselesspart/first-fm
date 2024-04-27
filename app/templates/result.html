@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div>
+    Result:
+    {% if result != '[]' %}
+    
+        {% for r in result%}
+        <fieldset>
+            <form action="{% url 'album_page'%}" method="post">
+                {% csrf_token %}
+                <br><input type="submit" class="link-button" value="{{r.0.0}}" />
+                <input type="hidden" name="album" value="{{r.0.0}}">
+            </form>
+            <br><form action="{% url 'artist_page'%}" method="post">
+                {% csrf_token %}
+                <br><input type="submit" class="link-button" value="{{r.1.0}}" />
+                <input type="hidden" name="artist" value="{{r.1.0}}">
+            </form>
+        </fieldset>
+
+        {% endfor%}
+        No more results!
+
+    {% else %}
+        No results!
+    {% endif %}
+</div>
+
+{% endblock %}

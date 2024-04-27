@@ -1,0 +1,25 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Next{% endblock %}</title>
+</head>
+
+<body>
+  <main>
+    {% load has_group %}
+    {% if request.user|has_group:"Admins" %} 
+    
+    {% block content %}
+    {% endblock %}
+
+    {% else %}
+    No access!
+    {% endif %}
+
+  </main>
+</body>
+
+</html>

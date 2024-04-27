@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+
+{% load has_group %}
+
+{% if request.user|has_group:"Admins" %} 
+    <p>Greetings, Mr. Administrator!</p>
+    <p>Add album</p>
+    <p>Add artist</p>
+    <p>Add genre</p>
+{% else %}
+    <p>Hello!</p>
+{% endif %}
+
+{% endblock %}

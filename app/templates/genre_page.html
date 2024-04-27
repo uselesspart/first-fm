@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div>
+    <br>{{genre.0}}
+    <br>Albums:
+    {% for album in albums %}
+
+        <form action="{% url 'album_page'%}" method="post">
+            {% csrf_token %}
+            <br><input type="submit" class="link-button" value="{{album.0}}" />
+            <input type="hidden" name="album" value="{{album.0}}">
+        </form>
+
+    {% endfor %}
+</div>
+
+{% endblock %}
