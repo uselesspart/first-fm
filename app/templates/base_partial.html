@@ -46,7 +46,7 @@
   
   <main>
     {% load has_group %}
-    {% if request.user|has_group:"Admins" %} 
+    {% if request.user|has_group:"Partial" %} 
     
     {% block content %}
     {% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base_partial.html" %}
+
+{% block title %}Add album{% endblock %}
+
+{% block content %}
+{% for a in artists %}
+<br>
+<form action="{% url 'artist_page'%}" method="post">
+    {% csrf_token %}
+    <input type="submit" class="link-button" value="{{a.0}}" />
+    <input type="hidden" name="artist" value="{{a.0}}" />
+</form>
+{% endfor %}
+
+{% endblock %}

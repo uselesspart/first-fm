@@ -1,0 +1,11 @@
+{% extends "base_partial.html" %}
+
+{% block title %}Add album{% endblock %}
+
+{% block content %}
+
+{% for s in songs %}
+<br>{{s.0}} - {{s.1.0}}
+{% endfor %}
+
+{% endblock %}

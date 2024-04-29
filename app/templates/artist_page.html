@@ -1,11 +1,31 @@
 {% extends "base.html" %}
 
-{% block title %}Search{% endblock %}
+{% block title %}Артист{% endblock %}
 
 {% block content %}
 <div>
+
+    <form action="{% url 'get_picture' %}" method="post">
+        {% csrf_token %}
+        <input type="submit" class="link-button" value="Фото" />
+        <input type="hidden" name="artist_id" value="{{artist_id}}" />
+    </form>
+
+    <br>
+    {% if request.user.id in fans%}
+        Вы подписаны
+    {% else %}
+        <form action="{% url 'add_to_favorites'%}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="link-button" value="Подписаться" /> 
+            <input type="hidden" name="artist_id" value="{{artist_id}}" />
+            <input type="hidden" name="user_id" value="{{request.user.id}}" />
+        </form>
+    {% endif %}
+    <br>
     <br>{{artist.0}}
-    <br>Albums:
+    <br>
+    <br>Альбомы:
     {% for album in albums %}
 
         <form action="{% url 'album_page'%}" method="post">

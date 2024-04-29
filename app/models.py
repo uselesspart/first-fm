@@ -3,7 +3,9 @@ from django.db import models
 
 
 class Image(models.Model):
-    img = models.ImageField()
+    id = models.AutoField(primary_key=True)
+    path = models.CharField(max_length=100, default='')
+    img = models.ImageField(upload_to=settings.MEDIA_ROOT)
 
 class Role(models.Model):
     id = models.AutoField(primary_key=True)
@@ -126,8 +128,13 @@ class Artist(models.Model):
         return self.name
 
 
-
 class Favorite(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
     artist_id = models.IntegerField()
+
+
+class Like(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.IntegerField()
+    song_id = models.IntegerField()

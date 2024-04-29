@@ -6,7 +6,7 @@
 <form action="{% url 'result'%}" method="post">
   {% csrf_token %}
   <fieldset>
-    <legend>Genre:</legend>
+    <legend>Жанр:</legend>
     
     {% for i in genres%}
     <div>
@@ -25,6 +25,6 @@
       <input type="text" id="year-end" name="year-end" value="2024" />
     </div>
   </fieldset>
-  <button type="submit">Search</button>
+  <button type="submit">Поиск</button>
 </form>
 {% endblock %}

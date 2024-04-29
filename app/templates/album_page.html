@@ -1,26 +1,97 @@
 {% extends "base.html" %}
 
-{% block title %}Search{% endblock %}
+{% block title %}Альбом{% endblock %}
 
 {% block content %}
 <div>
-    <br>{{data.0.0}}
-    
-    <br><form action="{% url 'artist_page'%}" method="post">
+    {% load static %}
+
+    <form action="{% url 'get_cover' %}" method="post">
         {% csrf_token %}
-        <br><input type="submit" class="link-button" value="{{data.1.0}}" />
-        <input type="hidden" name="artist" value="{{data.1.0}}">
+        <input type="submit" class="link-button" value="Обложка" />
+        <input type="hidden" name="album_id" value="{{album_id}}" />
+    </form>
+
+    <br>{{data.0.0}}
+
+
+    {% load has_group %}
+    {% if request.user|has_group:"Partial" %} 
+
+    <br>
+    <form action="{% url 'add_review'%}" method="post">
+        {% csrf_token %}
+        <input type="submit" class="link-button" value="Написать обзор" />
+        <input type="hidden" name="album_id" value="{{album_id}}" />
+    </form>
+
+    <br>
+    {% if request.user.id in ratings%}
+        Ваша оценка: 
+        <br>{% for r in rates %}
+                {% if r.0 == user.id %}
+                    {{r.1.rating}}
+                {% endif %}
+            {% endfor %}
+    {% else %}
+        <form action="{% url 'add_rating'%}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="album_id" value="{{album_id}}" />
+            <input type="number" min=1 max=5 name="rating"/>
+            <input type="hidden" name="user_id" value="{{request.user.id}}">
+            <input type="submit" class="link-button" value="Оценить" /> 
+        </form>
+    {% endif %}
+    <br>
+
+    {% else %}
+    <br>
+    {% endif %}
+    <br>
+    Исполнитель:
+    <form action="{% url 'artist_page'%}" method="post">
+        {% csrf_token %}
+        <input type="submit" class="link-button" value="{{data.1.0}}" />
+        <input type="hidden" name="artist" value="{{data.1.0}}" />
     </form>
     
+    <br>Год выхода:
     <br>{{data.2}}
-    <br>Genres:
+    <br>
+    <br>Жанры:
     {% for g in data.3 %}
-        <br><form action="{% url 'genre_page'%}" method="post">
+        <form action="{% url 'genre_page'%}" method="post">
             {% csrf_token %}
-            <br><input type="submit" class="link-button" value="{{g}}" />
+            <input type="submit" class="link-button" value="{{g}}" />
             <input type="hidden" name="genre" value="{{g}}">
         </form>
     {% endfor %}
+    <br>Песни:
+    {% for d in durations %}
+        <br>{{d.0}} - {{ d.1 }}:{{ d.2 }}
+        {% if request.user|has_group:"Partial" %} 
+        <form action="{% url 'add_like'%}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="link-button" value="Добавить в избранное" /> 
+            <input type="hidden" name="song_id" value="{{d.3}}" />
+            <input type="hidden" name="user_id" value="{{request.user.id}}" />
+            <input type="hidden" name="album" value="{{data.0.0}}" />
+        </form>
+        {% else %}
+        <br>
+        {% endif %}
+    {% endfor %}
+    <br>
+    <br>
+    Рецензии:
+    <br>{% for g in data.4 %}
+    <fieldset style="width: 50%; height: 150px;">
+        <legend>{{g.title}} </legend>
+        <div style="font-size: 16px;">
+        {{g.body}}    
+        </div>
+      </fieldset>
+      {% endfor %}
 </div>
 
 {% endblock %}

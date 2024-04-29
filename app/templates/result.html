@@ -4,28 +4,30 @@
 
 {% block content %}
 <div>
-    Result:
+    Результат:
     {% if result != '[]' %}
     
         {% for r in result%}
         <fieldset>
+            <br>Альбом:
             <form action="{% url 'album_page'%}" method="post">
                 {% csrf_token %}
-                <br><input type="submit" class="link-button" value="{{r.0.0}}" />
+                <input type="submit" class="link-button" value="{{r.0.0}}" />
                 <input type="hidden" name="album" value="{{r.0.0}}">
             </form>
-            <br><form action="{% url 'artist_page'%}" method="post">
+            <br>Исполнитель:
+            <form action="{% url 'artist_page'%}" method="post">
                 {% csrf_token %}
-                <br><input type="submit" class="link-button" value="{{r.1.0}}" />
+                <input type="submit" class="link-button" value="{{r.1.0}}" />
                 <input type="hidden" name="artist" value="{{r.1.0}}">
             </form>
         </fieldset>
 
         {% endfor%}
-        No more results!
+        Больше результатов нет.
 
     {% else %}
-        No results!
+        Больше результатов нет.
     {% endif %}
 </div>
 
