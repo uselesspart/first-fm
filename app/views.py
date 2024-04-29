@@ -50,6 +50,7 @@ def result(request):
 
     return render(request, 'result.html', context={"result": data})
 
+@cache_page(60*15)
 def genre_page(request):
     if request.method == 'POST':
         genre = request.POST.get('genre')
@@ -65,6 +66,7 @@ def genre_page(request):
         HttpResponseRedirect("../")
     return(render(request, 'genre_page.html', {'genre': genre}))    
 
+@cache_page(60*15)
 def artist_page(request):
     if request.method == 'POST':
         artist = request.POST.get('artist')
@@ -80,6 +82,7 @@ def artist_page(request):
         HttpResponseRedirect("../")
     return(render(request, 'artist_page.html', {'artist': artist}))
 
+@cache_page(60*15)
 def album_page(request):
     if request.method == 'POST':
         album = request.POST.get('album')
@@ -118,6 +121,7 @@ def get_cover(request):
     response = get_image(cover_id)
     return response
 
+@cache_page(60*15)
 def get_reviews(request):
     user_id = request.POST.get('user_id')
     reviews = list(Review.objects.filter(user_id=user_id))
@@ -216,7 +220,7 @@ def get_playlist(request):
     songs = []
     for s in song_pl:
         songs.append(s.song)
-    return render(request, 'playlist.html', {"songs": songs})
+    return render(request, 'playlist.html', {"songs":songs})
 
 def add_songs_playlist(request):
     playlist_id = request.POST.get('playlist')
