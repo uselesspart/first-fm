@@ -26,12 +26,21 @@ class User(models.Model):
         return self.name
 
 
+class Artist(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=20)
+    picture_id = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class Album(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
     user_id = models.IntegerField()
     cover_id = models.CharField(max_length=100)
-    artist_id = models.IntegerField()
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     year = models.IntegerField(default=0)
 
     def __str__(self):
@@ -41,9 +50,9 @@ class Album(models.Model):
 class Song(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
-    album_id = models.IntegerField()
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
     duration = models.IntegerField()
-    artist_id = models.IntegerField()
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -60,7 +69,7 @@ class Genre(models.Model):
 class Rating(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
-    album_id = models.IntegerField()
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
     rating = models.IntegerField()
     created_at = models.DateField()
 
@@ -78,7 +87,7 @@ class Collection(models.Model):
 class CollectionAlbum(models.Model):
     id = models.AutoField(primary_key=True)
     collection_id = models.IntegerField()
-    album_id = models.IntegerField()
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
 
 
 class Playlist(models.Model):
@@ -93,22 +102,22 @@ class Playlist(models.Model):
 
 class PlaylistSong(models.Model):
     id = models.AutoField(primary_key=True)
-    playlist_id = models.IntegerField()
-    song_id = models.IntegerField()
+    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
+    song = models.ForeignKey(Song, on_delete=models.CASCADE)
 
 
 class AlbumGenre(models.Model):
     id = models.AutoField(primary_key=True)
-    album_id = models.IntegerField()
-    genre_id = models.IntegerField()
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{Album.objects.get(id=self.album_id).name} -> {Genre.objects.get(id=self.genre_id).name}'
 
 class SongGenre(models.Model):
     id = models.AutoField(primary_key=True)
-    song_id = models.IntegerField()
-    genre_id = models.IntegerField()
+    song = models.ForeignKey(Song, on_delete=models.CASCADE)
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
 
 
 class Review(models.Model):
@@ -116,25 +125,18 @@ class Review(models.Model):
     title = models.CharField(max_length=20)
     body = models.TextField()
     user_id = models.IntegerField()
-    album_id = models.IntegerField()
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
 
 
-class Artist(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=20)
-    picture_id = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
 
 
 class Favorite(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
-    artist_id = models.IntegerField()
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
 
 
 class Like(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
-    song_id = models.IntegerField()
+    song = models.ForeignKey(Song, on_delete=models.CASCADE)
