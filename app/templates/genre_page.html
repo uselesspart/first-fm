@@ -5,7 +5,7 @@
 {% block content %}
 <div>
     <br>{{genre.0}}
-    <br>Albums:
+    <br>Альбомы:
     {% for album in albums %}
 
         <form action="{% url 'album_page'%}" method="post">

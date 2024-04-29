@@ -1,8 +1,10 @@
 {% extends "base_partial.html" %}
 
-{% block title %}Add album{% endblock %}
+{% block title %}Любимые песни{% endblock %}
 
 {% block content %}
+
+Любимые композиции:
 
 {% for s in songs %}
 <br>{{s.0}} - {{s.1.0}}

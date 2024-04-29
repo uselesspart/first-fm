@@ -3,7 +3,7 @@
 {% block title %}Альбом{% endblock %}
 
 {% block content %}
-<div>
+<div style="margin-left: 3%; margin-top: 3%;">
     {% load static %}
 
     <form action="{% url 'get_cover' %}" method="post">
@@ -16,6 +16,13 @@
 
 
     {% load has_group %}
+        {% if request.user|has_group:"Admins" %} 
+    <form action="{% url 'delete_album' %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Удалить альбом" style="margin-left: 35%;">
+        <input type="hidden" name="album_id" value="{{album_id}}" />
+    </form> 
+        {% endif %}
     {% if request.user|has_group:"Partial" %} 
 
     <br>
@@ -69,6 +76,7 @@
     <br>Песни:
     {% for d in durations %}
         <br>{{d.0}} - {{ d.1 }}:{{ d.2 }}
+        <div>
         {% if request.user|has_group:"Partial" %} 
         <form action="{% url 'add_like'%}" method="post">
             {% csrf_token %}
@@ -77,8 +85,14 @@
             <input type="hidden" name="user_id" value="{{request.user.id}}" />
             <input type="hidden" name="album" value="{{data.0.0}}" />
         </form>
-        {% else %}
-        <br>
+        {% endif %}
+        {% if request.user|has_group:"Admins" %} 
+        <form action="{% url 'delete_song' %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Удалить песню" >
+            <input type="hidden" name="song_id" value="{{d.3}}" />
+        </form> 
+        </div>
         {% endif %}
     {% endfor %}
     <br>

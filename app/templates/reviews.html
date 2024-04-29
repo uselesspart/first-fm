@@ -1,0 +1,26 @@
+{% extends "base_partial.html" %}
+
+{% block title %}Мои рецензии{% endblock %}
+
+{% block content %}
+
+Рецензии:
+    <br>
+    {% for d in data %}
+
+    <form action="{% url 'album_page'%}" method="post">
+        {% csrf_token %}
+        <br><input type="submit" class="link-button" value="{{d.1.name}}" />
+        <br>
+        <input type="hidden" name="album" value="{{d.1.name}}">
+    </form>
+
+    <fieldset style="width: 50%; height: 150px;">
+        <legend>{{d.0.title}} </legend>
+        <div style="font-size: 16px;">
+        {{d.0.body}}    
+        </div>
+      </fieldset>
+      {% endfor %}
+
+{% endblock %}

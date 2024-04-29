@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Search{% endblock %}
+{% block title %}Поиск{% endblock %}
 
 {% block content %}
 <form action="{% url 'result'%}" method="post">
@@ -17,11 +17,11 @@
 
   </fieldset>
   <fieldset>
-    <legend>Year</legend>
+    <legend>Год</legend>
     <div>
-      From:
+      С:
       <input type="text" id="year-start" name="year-start" value="1900" />
-      To:
+      До:
       <input type="text" id="year-end" name="year-end" value="2024" />
     </div>
   </fieldset>

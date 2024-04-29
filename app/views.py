@@ -10,6 +10,7 @@ import os
 import gridfs
 import base64
 from datetime import datetime
+from django.db.models import Q
 import requests
 from django.conf import settings
 import uuid
@@ -86,10 +87,6 @@ def album_page(request):
         artist = Artist.objects.filter(id=a[0].artist_id)
         year = a[0].year
         genres = list(Genre.objects.all())
-        response = get_image(a[0].cover_id)
-        image_path = f'/{a[0].cover_id}.jpg'
-        with open(f'static/images/albums/{image_path}', 'wb') as f:
-            f.write(response.content)
         res = []
         for g in genres:
             r = list(AlbumGenre.objects.filter(album_id=a[0].id, genre_id=g.id))
@@ -102,15 +99,15 @@ def album_page(request):
             if seconds < 10:
                 seconds = f'0{seconds}'
             durations.append([s, s.duration // 60, seconds, s.id])
-        reviews = list(Review.objects.filter(album_id=a[0].id))
-        ratings = list(Rating.objects.filter(album_id=a[0].id))
+        reviews = list(Review.objects.filter(album=a[0]))
+        ratings = list(Rating.objects.filter(album=a[0]))
         rated = []
         rates = []
         for r in ratings:
             rated.append(r.user_id)
             rates.append([r.user_id, r])
         
-        return(render(request, 'album_page.html', {'album': a, 'rates': rates, 'ratings': rated, 'durations': durations,'album_id': a[0].id,'data': [a, artist, year, res, reviews], 'image': f'static/images/albums{image_path}'}))
+        return(render(request, 'album_page.html', {'album': a, 'rates': rates, 'ratings': rated, 'durations': durations,'album_id': a[0].id,'data': [a, artist, year, res, reviews] }))
     else:
         HttpResponseRedirect("../")
     return(render(request, 'album_page.html', {'album': album}))
@@ -120,6 +117,14 @@ def get_cover(request):
     cover_id = list(Album.objects.filter(id=album_id))[0].cover_id
     response = get_image(cover_id)
     return response
+
+def get_reviews(request):
+    user_id = request.POST.get('user_id')
+    reviews = list(Review.objects.filter(user_id=user_id))
+    data = []
+    for review in reviews:
+        data.append([review, Album.objects.get(id=review.album.id)])
+    return render(request, 'reviews.html', {'data': data })
 
 def get_picture(request):
     artist_id = request.POST.get('artist_id')
@@ -165,7 +170,7 @@ def add_like(request):
     like = Like(song_id=song_id, user_id=user_id)
     like.save()
     #return(render(request, 'album_page.html', {'album': album}))
-    return album_page(request)
+    return get_likes(request)
 
 def add_to_favorites(request):
     artist_id = request.POST.get('artist_id')
@@ -179,9 +184,9 @@ def add_song(request):
     genres = Genre.objects.all()
     if form.is_valid():
         name = request.POST.get('name')
-        album = request.POST.get('album')
+        album = Album.objects.get(id=request.POST.get('album'))
         duration = request.POST.get('duration')
-        artist = request.POST.get('artist')
+        artist = album.artist
         album_l = list(Album.objects.filter(name=album))
         artist_l = list(Artist.objects.filter(name=artist))
         if album_l != [] and artist_l != []:
@@ -198,6 +203,56 @@ def add_song(request):
     else:
         form = SongForm()
     return render(request, 'add_song.html', {"form": form, "genres":genres})
+
+def get_playlists(request):
+    user_id = request.POST.get('user_id')
+    playlists = list(Playlist.objects.filter(user_id=user_id))
+    return render(request, 'playlists.html', {'playlists': playlists})
+
+def get_playlist(request):
+    playlist_id = request.POST.get('playlist')
+    playlist = Playlist.objects.get(id=playlist_id)
+    song_pl = list(PlaylistSong.objects.filter(playlist=playlist))
+    songs = []
+    for s in song_pl:
+        songs.append(s.song)
+    return render(request, 'playlist.html', {"songs": songs})
+
+def add_songs_playlist(request):
+    playlist_id = request.POST.get('playlist')
+    playlist = Playlist.objects.get(id=playlist_id)
+    songs_in_playlist = list(PlaylistSong.objects.filter(playlist=playlist))
+    song_ids = []
+    for s in songs_in_playlist:
+        song_ids.append(s.song)
+    songs = Song.objects.all()
+    res = []
+    for s in songs:
+        if s not in song_ids:
+            res.append(s)
+    return render(request, 'add_songs_playlist.html', {"songs": res, "playlist_id": playlist_id})
+
+def add_song_to_playlist(request):
+    song_id = request.POST.get('song_id')
+    playlist_id = request.POST.get('playlist')
+    playlist = Playlist.objects.get(id=playlist_id)
+    song = Song.objects.get(id=song_id)
+    playlist_song = PlaylistSong(song=song, playlist=playlist)
+    playlist_song.save()
+    return add_songs_playlist(request)
+
+def add_playlist(request):
+    if request.method == 'POST':
+        form = PlaylistForm(request.POST)
+        if form.is_valid():
+            name = request.POST.get('name')
+            user_id = request.POST.get('user_id')
+            playlist = Playlist(name=name, user_id=user_id)
+            playlist.save()
+            return HttpResponseRedirect("../")
+    else:
+        form = PlaylistForm()
+    return render(request, 'add_playlist.html', {'form': form})
 
 def add_review(request):
     if request.method == 'POST':
@@ -218,6 +273,33 @@ def add_review(request):
     }
     return render(request, 'add_review.html', context=context)
 
+def delete_album(request):
+    album_id = request.POST.get('album_id')
+    try:
+        album = Album.objects.get(id=album_id)
+        album.delete()
+        return HttpResponseRedirect("../")
+    except:
+        return HttpResponseRedirect("../")
+    
+def delete_artist(request):
+    artist_id = request.POST.get('artist_id')
+    try:
+        artist = Artist.objects.get(id=artist_id)
+        artist.delete()
+        return HttpResponseRedirect("../")
+    except:
+        return HttpResponseRedirect("../")
+    
+def delete_song(request):
+    song_id = request.POST.get('song_id')
+    try:
+        song = Song.objects.get(id=song_id)
+        song.delete()
+        return HttpResponseRedirect("../")
+    except:
+        return HttpResponseRedirect("../")
+
 def add_album(request):
     
     if request.method == 'POST':
@@ -227,14 +309,13 @@ def add_album(request):
         if form.is_valid():
             for filename, file in request.FILES.items():
                 file_id = save_image(request.FILES[filename], 'album cover', filename)
-            artist_name = request.POST.get('artist')
-            artist = list(Artist.objects.filter(name=artist_name))
-            if artist != []:
-                album = Album(name=request.POST.get('name'), cover_id=file_id, artist_id=artist[0].id, user_id = request.POST.get('user_id'), year=request.POST.get('year'))
+            artist = Artist.objects.get(id=request.POST.get('artist'))
+            if artist:
+                album = Album(name=request.POST.get('name'), cover_id=file_id, artist=artist, user_id = request.POST.get('user_id'), year=request.POST.get('year'))
                 album.save()
                 for g in genres:
                     if request.POST.get(g.name) == 'on':
-                        ag = AlbumGenre(album_id=album.id, genre_id=g.id)
+                        ag = AlbumGenre(album=album, genre=g)
                         ag.save()
             return HttpResponseRedirect("../")
     else:

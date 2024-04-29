@@ -11,6 +11,15 @@
         <input type="hidden" name="artist_id" value="{{artist_id}}" />
     </form>
 
+    {% load has_group %}
+        {% if request.user|has_group:"Admins" %} 
+    <form action="{% url 'delete_artist' %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Удалить исполнителя" style="margin-left: 35%;">
+        <input type="hidden" name="artist_id" value="{{artist_id}}" />
+    </form> 
+        {% endif %}
+        {% if request.user|has_group:"Admins" %} 
     <br>
     {% if request.user.id in fans%}
         Вы подписаны
@@ -21,6 +30,7 @@
             <input type="hidden" name="artist_id" value="{{artist_id}}" />
             <input type="hidden" name="user_id" value="{{request.user.id}}" />
         </form>
+    {% endif %}
     {% endif %}
     <br>
     <br>{{artist.0}}
