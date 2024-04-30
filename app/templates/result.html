@@ -12,13 +12,13 @@
             <br>Альбом:
             <form action="{% url 'album_page'%}" method="post">
                 {% csrf_token %}
-                <input type="submit" class="link-button" value="{{r.0.0}}" />
+                <input type="submit" class="link-button" value="{{r.0.0}}" style="font-size: 20px;cursor: pointer; text-decoration: underline; color: #069;background: none!important; padding: 0!important;  border: none; font-family: arial, sans-serif;"/>
                 <input type="hidden" name="album" value="{{r.0.0}}">
             </form>
             <br>Исполнитель:
             <form action="{% url 'artist_page'%}" method="post">
                 {% csrf_token %}
-                <input type="submit" class="link-button" value="{{r.1.0}}" />
+                <input type="submit" class="link-button" value="{{r.1.0}}" style="font-size: 20px;cursor: pointer; text-decoration: underline; color: #069;background: none!important; padding: 0!important;  border: none; font-family: arial, sans-serif;"/>
                 <input type="hidden" name="artist" value="{{r.1.0}}">
             </form>
         </fieldset>

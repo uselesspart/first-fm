@@ -222,20 +222,6 @@ def get_playlist(request):
         songs.append(s.song)
     return render(request, 'playlist.html', {"songs":songs})
 
-def add_songs_playlist(request):
-    playlist_id = request.POST.get('playlist')
-    playlist = Playlist.objects.get(id=playlist_id)
-    songs_in_playlist = list(PlaylistSong.objects.filter(playlist=playlist))
-    song_ids = []
-    for s in songs_in_playlist:
-        song_ids.append(s.song)
-    songs = Song.objects.all()
-    res = []
-    for s in songs:
-        if s not in song_ids:
-            res.append(s)
-    return render(request, 'add_songs_playlist.html', {"songs": res, "playlist_id": playlist_id})
-
 def add_song_to_playlist(request):
     song_id = request.POST.get('song_id')
     playlist_id = request.POST.get('playlist')
@@ -257,6 +243,71 @@ def add_playlist(request):
     else:
         form = PlaylistForm()
     return render(request, 'add_playlist.html', {'form': form})
+
+def add_collection(request):
+    if request.method == 'POST':
+        form = PlaylistForm(request.POST)
+        if form.is_valid():
+            name = request.POST.get('name')
+            user_id = request.POST.get('user_id')
+            collection = Collection(name=name, user_id=user_id)
+            collection.save()
+            return HttpResponseRedirect("../")
+    else:
+        form = PlaylistForm()
+    return render(request, 'add_collection.html', {'form': form})
+
+def add_songs_playlist(request):
+    playlist_id = request.POST.get('playlist')
+    playlist = Playlist.objects.get(id=playlist_id)
+    songs_in_playlist = list(PlaylistSong.objects.filter(playlist=playlist))
+    song_ids = []
+    for s in songs_in_playlist:
+        song_ids.append(s.song)
+    songs = Song.objects.all()
+    res = []
+    for s in songs:
+        if s not in song_ids:
+            res.append(s)
+    return render(request, 'add_songs_playlist.html', {"songs": res, "playlist_id": playlist_id})
+
+
+def add_albums_collection(request):
+    collection_id = request.POST.get('collection')
+    collection = Collection.objects.get(id=collection_id)
+    albums_in_collection = list(CollectionAlbum.objects.filter(collection=collection))
+    album_ids = []
+    for s in albums_in_collection:
+        album_ids.append(s.album)
+    albums = Album.objects.all()
+    res = []
+    for s in albums:
+        if s not in album_ids:
+            res.append(s)
+    return render(request, 'add_albums_collection.html', {"albums": res, "collection_id": collection_id})
+
+def add_album_to_collection(request):
+    album_id = request.POST.get('album_id')
+    collection_id = request.POST.get('collection')
+    collection = Collection.objects.get(id=collection_id)
+    album = Album.objects.get(id=album_id)
+    collection_album = CollectionAlbum(album=album, collection=collection)
+    collection_album.save()
+    return add_albums_collection(request)
+
+def get_collections(request):
+    user_id = request.POST.get('user_id')
+    collections = list(Collection.objects.filter(user_id=user_id))
+    return render(request, 'collections.html', {'collections': collections})
+
+def get_collection(request):
+    collection_id = request.POST.get('collection')
+    collection = Collection.objects.get(id=collection_id)
+    album_col = list(CollectionAlbum.objects.filter(collection=collection))
+    albums = []
+    for a in album_col:
+        albums.append(a.album)
+    return render(request, 'collection.html', {"albums": albums})
 
 def add_review(request):
     if request.method == 'POST':

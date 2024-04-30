@@ -11,7 +11,7 @@
 <form action="{% url 'get_playlist' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="playlist" value="{{p.id}}"/>
-    <button type="submit" > {{p.name}}</button>
+    <button type="submit" style="cursor: pointer; text-decoration: underline;font-size: 20px; color: #069;background: none!important; padding: 0!important;  border: none; font-family: arial, sans-serif;"> {{p.name}}</button>
 </form>
 
 <form action="{% url 'add_songs_playlist' %}" method="post">

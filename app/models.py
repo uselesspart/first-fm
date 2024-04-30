@@ -88,7 +88,7 @@ class Collection(models.Model):
 
 class CollectionAlbum(models.Model):
     id = models.AutoField(primary_key=True)
-    collection_id = models.IntegerField()
+    collection = models.ForeignKey(Collection, on_delete=models.CASCADE, null=True)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
 
 

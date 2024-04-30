@@ -1,0 +1,25 @@
+{% extends "base_partial.html" %}
+
+{% block title %}Коллекции{% endblock %}
+
+{% block content %}
+
+Ваши коллекции:
+
+{% for p in collections %}
+<br>
+<form action="{% url 'get_collection' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="collection" value="{{p.id}}"/>
+    <button type="submit" style="font-size: 20px; cursor: pointer; text-decoration: underline; color: #069;background: none!important; padding: 0!important;  border: none; font-family: arial, sans-serif;"> {{p.name}}</button>
+</form>
+
+<form action="{% url 'add_albums_collection' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="collection" value="{{p.id}}"/>
+    <input type="hidden" name="user_id" value="{{request.user.id}}"/>
+    <button type="submit" > Добавить альбомы</button>
+</form>
+{% endfor %}
+
+{% endblock %}

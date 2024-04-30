@@ -3,11 +3,11 @@
 {% block title %}Артист{% endblock %}
 
 {% block content %}
-<div>
+<fieldset style="margin-left: 1%; margin-top: 1%; margin-bottom: 1%; margin-right: 1%;">
 
     <form action="{% url 'get_picture' %}" method="post">
         {% csrf_token %}
-        <input type="submit" class="link-button" value="Фото" />
+        <input type="submit" class="link-button" value="Фото" style="cursor: pointer; font-size: 20px;text-decoration: underline; color: #069;background: none!important; padding: 0!important;  border: none; font-family: arial, sans-serif;"/>
         <input type="hidden" name="artist_id" value="{{artist_id}}" />
     </form>
 
@@ -19,7 +19,7 @@
         <input type="hidden" name="artist_id" value="{{artist_id}}" />
     </form> 
         {% endif %}
-        {% if request.user|has_group:"Admins" %} 
+        {% if request.user|has_group:"Partial" %} 
     <br>
     {% if request.user.id in fans%}
         Вы подписаны
@@ -40,11 +40,11 @@
 
         <form action="{% url 'album_page'%}" method="post">
             {% csrf_token %}
-            <br><input type="submit" class="link-button" value="{{album}}" />
-            <input type="hidden" name="album" value="{{album}}">
+            <br><input type="submit" class="link-button" value="{{album}}" style="cursor: pointer;font-size: 20px; text-decoration: underline; color: #069;background: none!important; padding: 0!important;  border: none; font-family: arial, sans-serif;" />
+            <input type="hidden" name="album" value="{{album}}" >
         </form>
 
     {% endfor %}
-</div>
+</fieldset>
 
 {% endblock %}
