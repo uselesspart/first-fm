@@ -10,3 +10,4 @@ pymongo
 Pillow
 redis
 requests
+django-extensions

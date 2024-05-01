@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} Персонал {% endblock %}
+
+{% block content %}
+
+{% load has_group %}
+
+{% if request.user.is_staff %}
+        <form action="{% url 'create_trainer'%}" method="post">
+                {% csrf_token %}
+                <br><input type="submit" class="button" value="Добавить тренера" />
+        </form>
+{% endif %}
+
+Персонал:
+{% for t in trainers %}
+<fieldset>
+    
+    <p></p>
+    <form action="{% url 'get_trainer' %}" method="post" >
+        {% csrf_token %}
+        <input type="hidden"  name="trainer" value="{{t.id}}" />
+        <button type="submit"  class="link-button">{{t}}</button>
+    </form>
+    <p></p>
+</fieldset>
+{% endfor %}
+{% endblock %}

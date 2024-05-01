@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Тренировка {% endblock %}
+
+{% block content %}
+
+{% load has_group %}
+
+Клиенты:
+{% for u in users %}
+<fieldset>
+    
+    <p></p>
+        {{u}}
+    <p></p>
+    <form action="{% url 'delete_user_from_ga'%}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="appointment" value="{{appointment}}" />
+        <input type="hidden" name="user_id" value="{{u.id}}" />
+        <br><input type="submit" class="button" value="Отменить запись пользователя" />
+</form>
+</fieldset>
+{% endfor %}
+{% endblock %}

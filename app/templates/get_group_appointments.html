@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %} Командные тренировки {% endblock %}
+
+{% block content %}
+
+{% load has_group %}
+
+{% if request.user.is_staff or request.user.is_partial %}
+        <form action="{% url 'create_group_appointment'%}" method="post">
+                {% csrf_token %}
+                <br><input type="submit" class="button" value="Создать тренировку" />
+        </form>
+
+        <form action="{% url 'add_user_to_group'%}" method="post">
+            {% csrf_token %}
+            <br><input type="submit" class="button" value="Записать пользователя на тренировку" />
+        </form>
+        Все тренировки:
+        {% for a in apps_all %}
+<fieldset>
+        <p>Тренер:</p>
+        {{a.trainer}}
+        <form action="{% url 'get_users_of_ga' %}" method="post" >
+            {% csrf_token %}
+            <input type="hidden"  name="appointment" value="{{a.id}}" />
+            <button type="submit"  class="link-button">{{a.name}}</button>
+        </form>
+        <p>Время:</p>
+        {{a.time}}
+        <form action="{% url 'delete_group_appointment'%}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="appointment" value="{{a.id}}" />
+                <input type="hidden" name="user_id" value="{{request.user.id}}" />
+                <br><input type="submit" class="button" value="Удалить тренировку" />
+        </form>
+</fieldset>
+        {% endfor %}
+{% else %}
+
+Мои тренировки:
+{% for a in apps %}
+<fieldset>
+    
+        <p>Тренер:</p>
+        {{a.trainer}}
+        <form action="{% url 'get_users_of_ga' %}" method="post" >
+            {% csrf_token %}
+            <input type="hidden"  name="appointment" value="{{a.id}}" />
+            <button type="submit"  class="link-button">{{a.name}}</button>
+        </form>
+        <p>Время:</p>
+        {{a.time}}
+
+{% endfor %}
+{% endif %}
+{% endblock %}

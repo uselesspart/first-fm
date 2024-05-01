@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %} Приложение {% endblock %}
+
+{% block content %}
+
+{% load has_group %}
+
+<form action="{% url 'create_appointment' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form}}
+    <label>Дата:</label>
+    <input type="datetime-local" id="appointment" data-date-format="DD MMMM YYYY" name="time" />
+    <button type="submit" class="button"> Отправить</button>
+</form>
+
+{% endblock %}

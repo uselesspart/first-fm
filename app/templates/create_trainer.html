@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Добавить тренера {% endblock %}
+
+{% block content %}
+
+{% load has_group %}
+
+<form action="{% url 'create_trainer' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form}}
+    <button type="submit" class="button"> Отправить</button>
+</form>
+
+{% endblock %}

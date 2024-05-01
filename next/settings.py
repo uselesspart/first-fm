@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'django_extensions',
     'accounts',
     'django.contrib.postgres',
     'gridfs_storage',

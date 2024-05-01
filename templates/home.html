@@ -5,13 +5,14 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-Hi {{ user.email }}!
+Привет, {{ user.email }}!
 <form action="{% url 'logout' %}" method="post">
   {% csrf_token %}
-  <button type="submit">Log Out</button>
+  <button type="submit" class="button">Выйти</button>
+  <br>
 </form>
 {% else %}
-<p>You are not logged in</p>
-<a href="{% url 'login' %}">Log In</a>
+<p>Войдите в систему</p>
+<a href="{% url 'login' %}">Войти</a>
 {% endif %}
 {% endblock %}

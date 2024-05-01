@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Программа {% endblock %}
+
+{% block content %}
+
+{% load has_group %}
+
+Упражнения:
+{% for t in trainings %}
+<fieldset>
+    
+    <p></p>
+        {{t}}
+    <p></p>
+    <form action="{% url 'delete_training_from_plan'%}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="plan" value="{{plan}}" />
+        <input type="hidden" name="training" value="{{t.id}}" />
+        <br><input type="submit" class="button" value="Убрать из программы" />
+    </form>
+</fieldset>
+{% endfor %}
+{% endblock %}

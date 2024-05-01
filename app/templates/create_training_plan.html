@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %} Добавить программу {% endblock %}
+
+{% block content %}
+
+{% load has_group %}
+
+<form action="{% url 'create_training_plan' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form}}
+    <p></p>
+    <P></P>
+    <button type="submit" class="button"> Отправить</button>
+</form>
+
+{% endblock %}

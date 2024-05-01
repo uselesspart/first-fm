@@ -1,78 +1,10 @@
-{% extends "base.html" %}
-
-{% block title %}Функции{% endblock %}
+{% extends 'base.html' %}
+{% block title %} Приложение {% endblock %}
 
 {% block content %}
 
 {% load has_group %}
 
-{% if request.user|has_group:"Admins" %} 
-    <p>Рады вас видеть, администратор!</p>
-
-    <form action="{% url 'add_album'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Добавить альбом" />
-    </form>
-
-    <form action="{% url 'add_artist'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Добавить исполнителя" />
-    </form>
-
-    <form action="{% url 'add_song'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Добавить песню" />
-    </form>
-
-{% else %}
-    <p>К сожалению, у вас недостаточно прав для доступа к некоторым функциям, предлагаем опробовать эти:</p>
-{% endif %}
-
-{% if request.user|has_group:"Partial" %} 
-
-    <form action="{% url 'get_likes'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Избранные песни" />
-        <input type="hidden" name="user_id" value="{{request.user.id}}" />
-    </form>
-
-    <form action="{% url 'get_favorites'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Избранные исполнители" />
-        <input type="hidden" name="user_id" value="{{request.user.id}}" />
-    </form>
-    <form action="{% url 'get_reviews'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Мои рецензии" />
-        <input type="hidden" name="user_id" value="{{request.user.id}}" />
-    </form>
-    <form action="{% url 'add_playlist'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Создать плейлист" />
-        <input type="hidden" name="user_id" value="{{request.user.id}}" />
-    </form>
-    <form action="{% url 'get_playlists'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Мои плейлисты" />
-        <input type="hidden" name="user_id" value="{{request.user.id}}" />
-    </form>
-    <form action="{% url 'add_collection'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Создать коллекцию" />
-        <input type="hidden" name="user_id" value="{{request.user.id}}" />
-    </form>
-    <form action="{% url 'get_collections'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Мои коллекции" />
-        <input type="hidden" name="user_id" value="{{request.user.id}}" />
-    </form>
-{% else %}
-
-{% endif %}
-
-    <form action="{% url 'search'%}" method="post">
-        {% csrf_token %}
-        <br><input type="submit" class="link-button" value="Поиск" />
-    </form>
+<p>Добро пожаловать.</p>
 
 {% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %} Тренировки {% endblock %}
+
+{% block content %}
+
+{% load has_group %}
+
+{% if request.user.is_staff or request.user.is_partial %}
+        <form action="{% url 'create_appointment'%}" method="post">
+                {% csrf_token %}
+                <br><input type="submit" class="button" value="Создать тренировку" />
+        </form>
+        Все тренировки:
+        {% for a in apps_all %}
+<fieldset>
+        <p>Клиент:</p>
+        {{a.user}}
+        <p>Тренер:</p>
+        {{a.trainer}}
+        <p>Время:</p>
+        {{a.time}}
+        <form action="{% url 'delete_appointment'%}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="appointment" value="{{a.id}}" />
+                <input type="hidden" name="user_id" value="{{request.user.id}}" />
+                <br><input type="submit" class="button" value="Удалить тренировку" />
+        </form>
+</fieldset>
+{% endfor %}
+{% else %}
+<br>
+Мои тренировки:
+{% for a in apps %}
+<fieldset>
+    
+        <p>Тренер:</p>
+        {{a.trainer}}
+        <p>Время:</p>
+        {{a.time}}
+    
+</fieldset>
+
+{% endfor %}
+{% endif %}
+{% endblock %}

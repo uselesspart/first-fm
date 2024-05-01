@@ -1,7 +1,81 @@
-.link-button { 
-    background: none;
-    border: none;
-    color: #1a0dab;
-    text-decoration: underline;
-    cursor: pointer; 
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Koulen&family=Lato&family=Nunito&family=Playfair+Display:ital@1&family=Prata&family=Raleway:ital,wght@1,100&family=Roboto&family=Roboto+Condensed&family=Teko&display=swap');
+
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+.topnav {
+    overflow: hidden;
+    background-color: #27586B;
+  }
+  
+.topnav a {
+    float: left;
+    color: #022735;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 22px;
+  }
+  
+.topnav a:hover {
+    background-color: #022735;
+    color: #6D92A0;
+  }
+  
+.topnav a.active {
+    background-color: #04AA6D;
+    color: white;
+  }
+
+
+.btn{
+
+font-family: Roboto, sans-serif;
+font-weight: 0;
+font-size: 14px;
+color: #022735;
+background-color: #27586b;
+padding: 10px 30px;
+border: solid #103e50 2px;
+box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
+border-radius: 50px;
+transition : 935ms;
+transform: translateY(0);
+display: flex;
+flex-direction: row;
+align-items: center;
+cursor: pointer;
+}
+
+.btn:hover{
+
+transition : 935ms;
+padding: 10px 50px;
+transform : translateY(-0px);
+background-color: #022735;
+color: #6D92A0;
+border: solid 2px #103e50;
+}
+
+.form-horizontal {
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+}
+
+.form-list {
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3%;
+}
+
+.t-area {
+
+    min-height: 2lh;
+    max-height: 5lh;
 }

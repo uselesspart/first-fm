@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %} Тренер {% endblock %}
+
+{% block content %}
+
+{% load has_group %}
+
+<fieldset>
+    <form action="{% url 'get_photo' %}" method="post">
+        {% csrf_token %}
+        <input type="submit" class="link-button" value="Фото" class="button"/>
+        <input type="hidden" name="trainer" value="{{trainer.id}}" />
+        <p>Имя:</p>
+        <p>{{trainer}}</p>
+    </form>
+</fieldset>
+{% endblock %}
